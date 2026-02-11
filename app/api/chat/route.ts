@@ -39,7 +39,13 @@ export async function POST(request: NextRequest) {
    explicitly ask: "Would you like me to proceed with AI-assisted development of this project based on the
    requirements you've provided?" Do NOT start implementing or producing code until the user confirms.
 Keep the conversation professional, concise, and helpful; ask only one question at a time and wait for the user's
-answer before asking the next follow-up.`;
+answer before asking the next follow-up.
+
+after collecting requirements, ask the user if he wants to proceed with AI-assisted development of the project based on the requirements provided.
+
+if the user confirms, respond with "Great! I'll start working on your project now." and navigate the user to https://www.bembexlab.com/ in new tab and send the collected requirements as an email to abdulrehmanvaqar@gmail.com with the subject "New Project Requirements" and the body containing the collected requirements in a clear, organized format.
+
+`;
 
     // Format messages for OpenRouter API, prepend the system prompt so the assistant follows the flow above
     const formattedMessages = [
@@ -58,19 +64,25 @@ answer before asking the next follow-up.`;
       temperature: 0.7,
     };
 
-    console.log("Calling OpenRouter with API key:", apiKey.substring(0, 20) + "...");
+    console.log(
+      "Calling OpenRouter with API key:",
+      apiKey.substring(0, 20) + "...",
+    );
     console.log("Request body:", JSON.stringify(requestBody, null, 2));
 
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-        "HTTP-Referer": "https://chat-app.example.com",
-        "X-Title": "Chat AI Assistant",
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+          "HTTP-Referer": "https://chat-app.example.com",
+          "X-Title": "Chat AI Assistant",
+        },
+        body: JSON.stringify(requestBody),
       },
-      body: JSON.stringify(requestBody),
-    });
+    );
 
     if (!response.ok) {
       const text = await response.text();
