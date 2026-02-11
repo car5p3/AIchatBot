@@ -295,6 +295,13 @@ const ChatPage = () => {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, aiResponse]);
+
+      // Check if we should navigate to the project website
+      if (data.shouldNavigate && data.navigateUrl) {
+        setTimeout(() => {
+          window.open(data.navigateUrl, '_blank');
+        }, 1000);
+      }
     } catch (error) {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
